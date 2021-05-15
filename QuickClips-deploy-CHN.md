@@ -8,7 +8,7 @@
 4. 将本方案代码克隆到本地：
 
 ```
-git clone  https://github.com/weiping-bj/SCP-Workaround-in-AWS-ChinaRegions.git
+git clone  https://github.com/weiping-bj/Quick-Clips-with-AWS-MediaConvert.git
 ```
 
 进入方案目录：
