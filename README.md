@@ -28,5 +28,5 @@ API Gateway 调用后端 lambda 函数。lambda 函数启动一个 MediaConvert 
 管理员通过 CloudFront 下载截取后的视频文件。
 
 关于方案的部署过程，请参考 [部署指导](QuickClips-deploy-CHN.md)。  
-方案中各参数的说明，请参考 [使用指导](QuickClips-usage-CHN)。
+方案中各参数的说明，请参考 [使用指导](QuickClips-usage-CHN.md)。
 

@@ -134,6 +134,8 @@ DynamoDB Table 将记录不同使用者请求视频片段的信息：
 在 ```Attach 权限策略``` 步骤中，选择以下 5 个托管策略：  
 ![CreateRole-policies](png/07-attachedPolicy.png "CreateRole-policies")
 
+为角色命名为 ```qcRole```。
+
 ### Lambda Function
 本方案中需要创建 2 个 Lambda 函数：
 
@@ -220,7 +222,7 @@ REST_API_ID=`aws apigateway create-rest-api --name quick-clips \
 ```
 {
     "id": "xxxxxxx",
-    "name": "scp",
+    "name": "quick-clips",
     "createdDate": "2021-04-19T22:42:39+08:00",
     "apiKeySource": "HEADER",
     "endpointConfiguration": {
@@ -234,7 +236,7 @@ REST_API_ID=`aws apigateway create-rest-api --name quick-clips \
 ```
 设置返回的 id 为 ```REST_API_ID```。  
 
-查看刚创建的 api-gateway 的资源：
+查看刚创建的 api-gateway 的资源，并设置 parent-id：
 
 ```
 PARENT_ID=`aws apigateway get-resources --rest-api-id $REST_API_ID --region us-east-1 | jq -r ".items" | jq -r ".[0].id"`
@@ -264,14 +266,14 @@ RESOURCE_ID_CLIPS=`aws apigateway create-resource --rest-api-id $REST_API_ID \
 --region us-east-1 |jq -r ".id"`
 ```
 
-如仅执行 ```create-resource```，记录下返回的资源 id，并手工设置 ```RESOURCE_ID_INI```：
+如仅执行 ```create-resource```，记录下返回的资源 id，并手工设置 ```RESOURCE_ID_CLIPS```：
 
 ```
 {
     "id": "zzzzzz",
     "parentId": "yyyyyyyyyy",
-    "pathPart": "ini",
-    "path": "/ini"
+    "pathPart": "clips",
+    "path": "/clips"
 }
 ```
 
@@ -319,11 +321,11 @@ aws apigateway put-integration-response --rest-api-id $REST_API_ID \
 --region us-east-1
 ```
 
-为 Lambda 函数 ```qc-01-clippingl``` 添加允许 API Gateway 调用的权限：
+为 Lambda 函数 ```qc-01-clipping``` 添加允许 API Gateway 调用的权限：
 
 ```
 aws lambda add-permission --function-name qc-01-clipping \
---statement-id AllowInvokeFromSCP_ini \
+--statement-id AllowInvokeFromQC_clips \
 --action lambda:InvokeFunction \
 --principal apigateway.amazonaws.com \
 --source-arn "arn:aws:execute-api:us-east-1:"$ACCOUNT_ID":"$REST_API_ID"/*/POST/clips" \
@@ -338,7 +340,7 @@ aws apigateway create-deployment --rest-api-id $REST_API_ID \
 --region us-east-1
 ```
 
-至此，方案部署完毕。使用说明请参考 [使用指导](QuickClips-usage-CHN)。
+至此，方案部署完毕。使用说明请参考 [使用指导](QuickClips-usage-CHN.md)。
 
-[返回 README](../README.md)
+[返回 README](README.md)
 
